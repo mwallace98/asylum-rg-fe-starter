@@ -9,6 +9,7 @@ import { Button } from 'antd';
 import { useHistory } from 'react-router-dom';
 // for the purposes of testing PageNav
 // import PageNav from '../../common/PageNav';
+import PageNav from '../../common/PageNav';
 
 function RenderLandingPage(props) {
   const scrollToTop = () => {
@@ -22,6 +23,7 @@ function RenderLandingPage(props) {
     <div className="main">
       <div className="header">
         <div className="header-text-container">
+
           <h1>Asylum Office Grant Rate Tracker</h1>
           <h3>
             The Asylum Office Grant Rate Tracker provides asylum seekers,
@@ -32,7 +34,9 @@ function RenderLandingPage(props) {
       </div>
 
       {/* Graphs Section: Add code here for the graphs section for your first ticket */}
-      {/* <div className="graphs-section"> */}
+      <div className="graphs-section">
+        
+      </div>
       <div className="view-more-data-btn-container">
         <Button
           type="default"
@@ -40,6 +44,7 @@ function RenderLandingPage(props) {
           onClick={() => history.push('/graphs')}
         >
           View the Data
+          
         </Button>
       </div>
 
