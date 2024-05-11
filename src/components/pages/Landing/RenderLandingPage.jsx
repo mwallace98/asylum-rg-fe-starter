@@ -11,6 +11,7 @@ import { useHistory } from 'react-router-dom';
 // import PageNav from '../../common/PageNav';
 import PageNav from '../../common/PageNav';
 
+
 function RenderLandingPage(props) {
   const scrollToTop = () => {
     document.body.scrollTop = 0;
@@ -18,6 +19,7 @@ function RenderLandingPage(props) {
   };
 
   const history = useHistory();
+
 
   return (
     <div className="main">
