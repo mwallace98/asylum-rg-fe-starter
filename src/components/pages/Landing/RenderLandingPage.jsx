@@ -99,7 +99,6 @@ function RenderLandingPage(props) {
             Back To Top ^
           </p>
       </div>
-    </div>
   );
 }
 export default RenderLandingPage;
