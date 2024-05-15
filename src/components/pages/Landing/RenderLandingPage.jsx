@@ -85,12 +85,19 @@ function RenderLandingPage(props) {
           </h3>
         </div>
       </div>
-      <div>
+      <div className="bottom-section">
         {/* Bottom Section: Add code here for the graphs section for your first ticket */}
-        {/* <div className="bottom-section">*/}
-        <p onClick={() => scrollToTop()} className="back-to-top">
-          Back To Top ^
-        </p>
+        <div className='h2-row'>
+          <div className='h2-with-p'></div>
+            <h2>36%</h2>
+            <p>test p1</p>
+          </div>  
+          <h2>5%</h2>
+          <h2>6X Lower</h2>
+        </div>
+          <p onClick={() => scrollToTop()} className="back-to-top">
+            Back To Top ^
+          </p>
       </div>
     </div>
   );
