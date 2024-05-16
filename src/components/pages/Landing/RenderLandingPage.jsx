@@ -10,6 +10,8 @@ import { useHistory } from 'react-router-dom';
 // for the purposes of testing PageNav
 // import PageNav from '../../common/PageNav';
 import PageNav from '../../common/PageNav';
+import { StatSection } from './StatSection';
+import { Header } from './Header';
 
 
 function RenderLandingPage(props) {
@@ -68,7 +70,6 @@ function RenderLandingPage(props) {
           
         </Button>
       </div>
-
       <div className="middle-section">
         <div className="hrf-img-container">
           <img src={HrfPhoto} alt="Human Rights First" className="hrf-img" />
@@ -84,30 +85,27 @@ function RenderLandingPage(props) {
             the data set
           </h3>
         </div>
-      </div>
+      </div> 
       <div className="bottom-section">
-        {/* Bottom Section: Add code here for the graphs section for your first ticket */}
-        <div className='h2-row'>
-          <div className='h2-with-p'>
-            <h2>36%</h2>
-            <p>
-              By the end of the Trump administration, 
-              the average asylum office grant rate had fallen 36 percent
-              from an average of 44 percent in fiscal year 2016 to 28 percent in fiscal year 2020.
-            </p>
-          </div>
-          <div className='h2-with-p'>
-          <h2>5%</h2>
-            <p>The New York asylum office grant rate dropped to 5 percent in fiscal year 2020.</p>
-            </div>
-          <div className='h2-with-p'>            
-          <h2>6X Lower</h2>
-            <p>Between fiscal year 2017 and 2020, 
-              the New York asylum office’s average grant rate 
-              was six times lower than the San Francisco asylum office.</p>
-          </div>
-        </div>  
-        </div>
+    {/* Bottom Section: Add code here for the graphs section for your first ticket */}
+    <Header />
+    <div className='h2-row'>
+        <StatSection
+          title='36%'
+          text='By the end of the Trump administration, 
+          the average asylum office grant rate had fallen 36 percent
+          from an average of 44 percent in fiscal year 2016 to 28 percent in fiscal year 2020.'
+        />
+        <StatSection
+        title='5%'
+        text='The New York asylum office grant rate dropped to 5 percent in fiscal year 2020.'
+        />
+        <StatSection
+        title='6x Lower'
+        text='Between fiscal year 2017 and 2020, the New York asylum office’s average grant rate was six times lower than the San Francisco asylum office.'
+        />
+    </div>  
+</div>
         <div>
           <p onClick={() => scrollToTop()} className="back-to-top">
             Back To Top ^
@@ -117,3 +115,5 @@ function RenderLandingPage(props) {
   );
 }
 export default RenderLandingPage;
+
+
