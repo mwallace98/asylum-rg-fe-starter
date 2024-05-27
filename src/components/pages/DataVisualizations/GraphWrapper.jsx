@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect,useState,useRef } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import CitizenshipMapAll from './Graphs/CitizenshipMapAll';
@@ -16,27 +16,72 @@ import ScrollToTopOnMount from '../../../utils/scrollToTopOnMount';
 
 
 const { background_color } = colors;
+const URL = 'https://hrf-asylum-be-b.herokuapp.com/cases';
 
 function GraphWrapper(props) {
   const { set_view, dispatch } = props;
   let { office, view } = useParams();
-  const[data,SetData] = useState(null);
+  const[data,setData] = useState(null);
+  
+
+  
+  
+  
+
+  const getFiscalSummaryData = async () => {
+    try {
+      const res = await axios.get(`${URL}/fiscalsummary`);
+      // console.log(res.data, 'Fiscal Summary Data');
+      let fiscalSummaryData = [];
+      fiscalSummaryData.push(res.data);
+      console.log(fiscalSummaryData,'fiscalSummaryData');
+      setData(fiscalSummaryData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+
+  const getCitizenshipSummaryData = async () => {
+    try {
+      const res = await axios.get(`${URL}/citizenshipSummary`);
+      console.log(res.data, 'Citizenship Summary Data');
+      let CitizenshipData = [];
+      CitizenshipData.push(res.data);
+      console.log(CitizenshipData,'citizenship data');
+      setData(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  
+
+  useEffect(() => {
+    if (view === 'citizenship') {
+      getCitizenshipSummaryData();
+    } else {
+      getFiscalSummaryData();
+    }
+  }, [view]);
 
   if (!view) {
     set_view('time-series');
     view = 'time-series';
   }
+  
   let map_to_render;
   if (!office) {
     switch (view) {
       case 'time-series':
-        map_to_render = <TimeSeriesAll />;
+        map_to_render = <TimeSeriesAll data={data}/>;
         break;
       case 'office-heat-map':
-        map_to_render = <OfficeHeatMap />;
+        map_to_render = <OfficeHeatMap data={data}/>;
         break;
       case 'citizenship':
-        map_to_render = <CitizenshipMapAll />;
+        map_to_render = <CitizenshipMapAll data={data}/>;
         break;
       default:
         break;
@@ -44,18 +89,22 @@ function GraphWrapper(props) {
   } else {
     switch (view) {
       case 'time-series':
-        map_to_render = <TimeSeriesSingleOffice office={office} />;
+        map_to_render = <TimeSeriesSingleOffice office={office} data={data}/>;
+        
         break;
       case 'citizenship':
-        map_to_render = <CitizenshipMapSingleOffice office={office} />;
+        map_to_render = <CitizenshipMapSingleOffice office={office} data={data}/>;
         break;
       default:
         break;
     }
   }
-  function updateStateWithNewData(years, view, office, stateSettingCallback) {
 
-    
+  
+
+
+  function updateStateWithNewData(years, view, office,stateSettingCallback) {
+
     /*
           _                                                                             _
         |                                                                                 |
@@ -77,43 +126,45 @@ function GraphWrapper(props) {
                                    -- Mack 
     
     */
-
+  
+   const  params= {
+    from:years[0],
+    to:years[1],
+  };
+    
     if (office === 'all' || !office) {
-      axios
-        .get(process.env.REACT_APP_API_URI, {
-          // mock URL, can be simply replaced by `${Real_Production_URL}/summary` in prod!
-          params: {
-            from: years[0],
-            to: years[1],
-          },
-        })
-        .then(result => {
-          stateSettingCallback(view, office, test_data); // <-- `test_data` here can be simply replaced by `result.data` in prod!
-        })
-        .catch(err => {
-          console.error(err);
-        });
+      axios.get(`${URL}`,{params})
+      .then(res => {       
+        stateSettingCallback(view,office,data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
     } else {
       axios
-        .get(process.env.REACT_APP_API_URI, {
+        .get(`${URL}/fiscalsummary`, {
           // mock URL, can be simply replaced by `${Real_Production_URL}/summary` in prod!
           params: {
             from: years[0],
             to: years[1],
-            office: office,
-          },
+          }
         })
-        .then(result => {
-          stateSettingCallback(view, office, test_data); // <-- `test_data` here can be simply replaced by `result.data` in prod!
+        .then(res => {
+          stateSettingCallback(view, office, res.data); // <-- `test_data` here can be simply replaced by `result.data` in prod!
+          console.log(res.data,'res.data inside else');
         })
         .catch(err => {
-          console.error(err);
+          console.error(err,'error');
+          
         });
     }
   }
   const clearQuery = (view, office) => {
     dispatch(resetVisualizationQuery(view, office));
   };
+
+ 
+
   return (
     <div
       className="map-wrapper-container"
