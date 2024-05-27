@@ -32,15 +32,18 @@ function GraphWrapper(props) {
     try {
       const res = await axios.get(`${URL}/fiscalsummary`);
       let fiscalSummaryData = [];
-      console.log(res.data.yearResults,'res.data.yearResults');
       let modifiedData = {
+        ...res.data,
         yearResults: res.data.yearResults.map(yearResult => ({
-          ...yearResult,
-          denied: 100 - yearResult.granted
+          ...yearResult, 
+          denied: 100 - yearResult.granted,
+          yearData: yearResult.yearData.map(yearDataItem => ({
+            ...yearDataItem,
+            denied: 100 - yearDataItem.granted
+          }))
         }))
       };
       fiscalSummaryData.push(modifiedData);
-      console.log(modifiedData,'modifed data');
       setData(fiscalSummaryData);
     } catch (err) {
       console.log(err);
@@ -62,6 +65,9 @@ function GraphWrapper(props) {
     }
   };
 
+  useEffect(() => {
+    console.log('mounted',);
+  });
   
 
   useEffect(() => {
@@ -136,11 +142,13 @@ function GraphWrapper(props) {
    const  params= {
     from:years[0],
     to:years[1],
+    office: office !== 'all' && office ? office : undefined
   };
     
     if (office === 'all' || !office) {
       axios.get(`${URL}`,{params})
       .then(res => {       
+        console.log(res.data,'res.data');
         stateSettingCallback(view,office,data);
       })
       .catch(err => {
@@ -148,16 +156,11 @@ function GraphWrapper(props) {
       });
     } else {
       axios
-        .get(`${URL}/fiscalsummary`, {
-          // mock URL, can be simply replaced by `${Real_Production_URL}/summary` in prod!
-          params: {
-            from: years[0],
-            to: years[1],
-          }
-        })
+        .get(`${URL}`,{params})
         .then(res => {
-          stateSettingCallback(view, office, res.data); // <-- `test_data` here can be simply replaced by `result.data` in prod!
-          console.log(res.data,'res.data inside else');
+          console.log(data,'data inside office select');
+          stateSettingCallback(view, office, data); // <-- `test_data` here can be simply replaced by `result.data` in prod!
+          
         })
         .catch(err => {
           console.error(err,'error');
