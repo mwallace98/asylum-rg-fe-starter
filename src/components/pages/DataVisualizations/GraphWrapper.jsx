@@ -31,10 +31,16 @@ function GraphWrapper(props) {
   const getFiscalSummaryData = async () => {
     try {
       const res = await axios.get(`${URL}/fiscalsummary`);
-      // console.log(res.data, 'Fiscal Summary Data');
       let fiscalSummaryData = [];
-      fiscalSummaryData.push(res.data);
-      console.log(fiscalSummaryData,'fiscalSummaryData');
+      console.log(res.data.yearResults,'res.data.yearResults');
+      let modifiedData = {
+        yearResults: res.data.yearResults.map(yearResult => ({
+          ...yearResult,
+          denied: 100 - yearResult.granted
+        }))
+      };
+      fiscalSummaryData.push(modifiedData);
+      console.log(modifiedData,'modifed data');
       setData(fiscalSummaryData);
     } catch (err) {
       console.log(err);
