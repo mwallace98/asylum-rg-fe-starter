@@ -57,7 +57,9 @@ function GraphWrapper(props) {
       const res = await axios.get(`${URL}/citizenshipSummary`);
       let CitizenshipData = [];
       CitizenshipData.push(res.data);
-      setData(res.data);
+      console.log(CitizenshipData, 'citizenship data');
+      setData(CitizenshipData);
+      console.log(data,'data inside getcitizenshipsummary');
     } catch (err) {
       console.log(err);
     }
