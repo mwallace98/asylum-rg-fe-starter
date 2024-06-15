@@ -55,19 +55,14 @@ function GraphWrapper(props) {
   const getCitizenshipSummaryData = async () => {
     try {
       const res = await axios.get(`${URL}/citizenshipSummary`);
-      console.log(res.data, 'Citizenship Summary Data');
       let CitizenshipData = [];
       CitizenshipData.push(res.data);
-      console.log(CitizenshipData,'citizenship data');
       setData(res.data);
     } catch (err) {
       console.log(err);
     }
   };
 
-  useEffect(() => {
-    console.log('mounted',);
-  });
   
 
   useEffect(() => {
@@ -148,7 +143,6 @@ function GraphWrapper(props) {
     if (office === 'all' || !office) {
       axios.get(`${URL}`,{params})
       .then(res => {       
-        console.log(res.data,'res.data');
         stateSettingCallback(view,office,data);
       })
       .catch(err => {
@@ -158,7 +152,6 @@ function GraphWrapper(props) {
       axios
         .get(`${URL}`,{params})
         .then(res => {
-          console.log(data,'data inside office select');
           stateSettingCallback(view, office, data); // <-- `test_data` here can be simply replaced by `result.data` in prod!
           
         })
