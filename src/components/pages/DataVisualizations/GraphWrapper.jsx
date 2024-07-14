@@ -1,4 +1,4 @@
-import React, { useEffect,useState,useRef } from 'react';
+import React, { useEffect,useState,useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import CitizenshipMapAll from './Graphs/CitizenshipMapAll';
@@ -22,58 +22,48 @@ function GraphWrapper(props) {
   const { set_view, dispatch } = props;
   let { office, view } = useParams();
   const[data,setData] = useState(null);
-  
-
-  
-  
-  
-
-  const getFiscalSummaryData = async () => {
-    try {
-      const res = await axios.get(`${URL}/fiscalsummary`);
-      let fiscalSummaryData = [];
-      let modifiedData = {
-        ...res.data,
-        yearResults: res.data.yearResults.map(yearResult => ({
-          ...yearResult, 
-          denied: 100 - yearResult.granted,
-          yearData: yearResult.yearData.map(yearDataItem => ({
-            ...yearDataItem,
-            denied: 100 - yearDataItem.granted
-          }))
-        }))
-      };
-      fiscalSummaryData.push(modifiedData);
-      setData(fiscalSummaryData);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-
-
-  const getCitizenshipSummaryData = async () => {
-    try {
-      const res = await axios.get(`${URL}/citizenshipSummary`);
-      let CitizenshipData = [];
-      CitizenshipData.push(res.data);
-      console.log(CitizenshipData, 'citizenship data');
-      setData(CitizenshipData);
-      console.log(data,'data inside getcitizenshipsummary');
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  
 
   useEffect(() => {
+    const getFiscalSummaryData = async () => {
+      try {
+        const res = await axios.get(`${URL}/fiscalsummary`);
+        let fiscalSummaryData = [];
+        let modifiedData = {
+          ...res.data,
+          yearResults: res.data.yearResults.map(yearResult => ({
+            ...yearResult,
+            denied: 100 - yearResult.granted,
+            yearData: yearResult.yearData.map(yearDataItem => ({
+              ...yearDataItem,
+              denied: 100 - yearDataItem.granted
+            }))
+          }))
+        };
+        fiscalSummaryData.push(modifiedData);
+        setData(fiscalSummaryData);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    const getCitizenshipSummaryData = async () => {
+      console.log('citizenship data loaded');
+      try {
+        const res = await axios.get(`${URL}/citizenshipSummary`);
+        let CitizenshipData = [];
+        CitizenshipData.push(res.data);
+        setData(CitizenshipData);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
     if (view === 'citizenship') {
       getCitizenshipSummaryData();
     } else {
       getFiscalSummaryData();
     }
-  }, [view]);
+  }, [view]); 
 
   if (!view) {
     set_view('time-series');
@@ -144,8 +134,10 @@ function GraphWrapper(props) {
     
     if (office === 'all' || !office) {
       axios.get(`${URL}`,{params})
-      .then(res => {       
+      .then(res => {    
+        
         stateSettingCallback(view,office,data);
+        console.log(data,'data insisde office all');
       })
       .catch(err => {
         console.log(err);
@@ -154,6 +146,8 @@ function GraphWrapper(props) {
       axios
         .get(`${URL}`,{params})
         .then(res => {
+          console.log(res.data,'res.data');
+          console.log('data inside office select',data);
           stateSettingCallback(view, office, data); // <-- `test_data` here can be simply replaced by `result.data` in prod!
           
         })
