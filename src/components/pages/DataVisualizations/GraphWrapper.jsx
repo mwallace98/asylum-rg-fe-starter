@@ -13,57 +13,50 @@ import { resetVisualizationQuery } from '../../../state/actionCreators';
 import test_data from '../../../data/test_data.json';
 import { colors } from '../../../styles/data_vis_colors';
 import ScrollToTopOnMount from '../../../utils/scrollToTopOnMount';
+import { modalGlobalConfig } from 'antd/lib/modal/confirm';
 
 
 const { background_color } = colors;
 const URL = 'https://hrf-asylum-be-b.herokuapp.com/cases';
 
+
 function GraphWrapper(props) {
   const { set_view, dispatch } = props;
   let { office, view } = useParams();
-  const[data,setData] = useState(null);
+  const[data,setData] = useState([]);
+;
 
   useEffect(() => {
-    const getFiscalSummaryData = async () => {
+    const getData = async () => {
       try {
         const res = await axios.get(`${URL}/fiscalsummary`);
+        const resCitizenship = await axios.get(`${URL}/citizenshipSummary`);
+        console.log(res,'fiscal summary');
         let fiscalSummaryData = [];
         let modifiedData = {
           ...res.data,
-          yearResults: res.data.yearResults.map(yearResult => ({
-            ...yearResult,
-            denied: 100 - yearResult.granted,
-            yearData: yearResult.yearData.map(yearDataItem => ({
-              ...yearDataItem,
-              denied: 100 - yearDataItem.granted
-            }))
-          }))
+          // yearResults: res.data.yearResults.map(yearResult => ({
+          //   ...yearResult,
+          //   denied: 100 - yearResult.granted,
+          //   yearData: yearResult.yearData.map(yearDataItem => ({
+          //     ...yearDataItem,
+          //     denied: 100 - yearDataItem.granted
+          //   }))
+          // })),
+          citizenshipResults:resCitizenship.data
         };
+        console.log(modifiedData,'modified data');
         fiscalSummaryData.push(modifiedData);
-        setData(fiscalSummaryData);
+        setData([modifiedData]);
       } catch (err) {
         console.log(err);
       }
     };
 
-    const getCitizenshipSummaryData = async () => {
-      console.log('citizenship data loaded');
-      try {
-        const res = await axios.get(`${URL}/citizenshipSummary`);
-        let CitizenshipData = [];
-        CitizenshipData.push(res.data);
-        setData(CitizenshipData);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    if (view === 'citizenship') {
-      getCitizenshipSummaryData();
-    } else {
-      getFiscalSummaryData();
-    }
-  }, [view]); 
+      getData();
+      
+    },[URL,view]);
+  
 
   if (!view) {
     set_view('time-series');
@@ -102,7 +95,7 @@ function GraphWrapper(props) {
   
 
 
-  function updateStateWithNewData(years, view, office,stateSettingCallback) {
+   const updateStateWithNewData = async (years, view, office,stateSettingCallback) => {
 
     /*
           _                                                                             _
@@ -135,28 +128,23 @@ function GraphWrapper(props) {
     if (office === 'all' || !office) {
       axios.get(`${URL}`,{params})
       .then(res => {    
-        
         stateSettingCallback(view,office,data);
-        console.log(data,'data insisde office all');
       })
       .catch(err => {
         console.log(err);
       });
     } else {
+      
       axios
         .get(`${URL}`,{params})
         .then(res => {
-          console.log(res.data,'res.data');
-          console.log('data inside office select',data);
-          stateSettingCallback(view, office, data); // <-- `test_data` here can be simply replaced by `result.data` in prod!
-          
+          stateSettingCallback(view,office,data); // <-- `test_data` here can be simply replaced by `result.data` in prod!
         })
         .catch(err => {
           console.error(err,'error');
-          
         });
     }
-  }
+  };
   const clearQuery = (view, office) => {
     dispatch(resetVisualizationQuery(view, office));
   };
