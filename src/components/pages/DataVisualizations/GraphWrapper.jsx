@@ -35,14 +35,6 @@ function GraphWrapper(props) {
         let fiscalSummaryData = [];
         let modifiedData = {
           ...res.data,
-          // yearResults: res.data.yearResults.map(yearResult => ({
-          //   ...yearResult,
-          //   denied: 100 - yearResult.granted,
-          //   yearData: yearResult.yearData.map(yearDataItem => ({
-          //     ...yearDataItem,
-          //     denied: 100 - yearDataItem.granted
-          //   }))
-          // })),
           citizenshipResults:resCitizenship.data
         };
         console.log(modifiedData,'modified data');
