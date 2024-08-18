@@ -27,9 +27,18 @@ function RenderLandingPage(props) {
   return (
     <div className="main">
       <div className="header">
-        <div className="header-text-container">
+        <div className="header-text-container">\
+        <Button
+          type="default"
+          style={{ backgroundColor: '#404C4A', color: '#FFFFFF' }}
+          onClick={() => history.push('/login')}
+        >
+          Login
+          
+        </Button>
 
           <h1>Asylum Office Grant Rate Tracker</h1>
+          
           <h3>
             The Asylum Office Grant Rate Tracker provides asylum seekers,
             researchers, policymakers, and the public an interactive tool to
