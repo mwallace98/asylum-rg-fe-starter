@@ -70,6 +70,7 @@ function RenderLandingPage(props) {
           Download the Data
           
         </Button>
+
       </div>
       <div className="middle-section">
         <div className="hrf-img-container">
