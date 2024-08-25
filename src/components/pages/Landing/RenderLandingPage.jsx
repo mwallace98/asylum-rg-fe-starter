@@ -9,9 +9,9 @@ import { Button } from 'antd';
 import { useHistory } from 'react-router-dom';
 // for the purposes of testing PageNav
 // import PageNav from '../../common/PageNav';
-import PageNav from '../../common/PageNav';
 import { StatSection } from './StatSection';
 import { Header } from './Header';
+import LoginButton from '../../login-button';
 
 
 function RenderLandingPage(props) {
@@ -28,17 +28,10 @@ function RenderLandingPage(props) {
     <div className="main">
       <div className="header">
         <div className="header-text-container">\
-        <Button
-          type="default"
-          style={{ backgroundColor: '#404C4A', color: '#FFFFFF' }}
-          onClick={() => history.push('/login')}
-        >
-          Login
-          
-        </Button>
-
+      
+        <LoginButton />
           <h1>Asylum Office Grant Rate Tracker</h1>
-          
+         
           <h3>
             The Asylum Office Grant Rate Tracker provides asylum seekers,
             researchers, policymakers, and the public an interactive tool to
@@ -51,15 +44,15 @@ function RenderLandingPage(props) {
       <div className="graphs-section">
         <div className='graph-item'>
           <img alt='grantByOffice' src={GrantRatesByOfficeImg}></img>
-          <text>Search Grant Rates By Nationality</text>
+          <p>Search Grant Rates By Nationality</p>
         </div>
         <div className='graph-item'>
           <img alt='grantByNationality' src={GrantRatesByNationalityImg}></img>
-          <text>Search Grant Rates By Office</text>
+          <p>Search Grant Rates By Office</p>
         </div>
         <div className='graph-item'>
           <img alt='grantOverTime' src={GrantRatesOverTimeImg}></img>
-          <text>Search Grant Rates Over Time</text>
+          <p>Search Grant Rates Over Time</p>
         </div>
       </div>
       <div className="view-more-data-btn-container">

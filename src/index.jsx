@@ -14,6 +14,7 @@ import { Login } from './components/pages/Login/login';
 
 import { FooterContent, SubFooter } from './components/Layout/Footer';
 import { HeaderContent } from './components/Layout/Header';
+import { Auth0Provider } from '@auth0/auth0-react';
 
 
 // import { TablePage } from './components/pages/Table';
@@ -24,6 +25,9 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import reducer from './state/reducers';
 import { colors } from './styles/data_vis_colors';
+import { BrowserRouter } from 'react-router-dom/cjs/react-router-dom.min';
+import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
+
 
 const { primary_accent_color } = colors;
 
@@ -32,7 +36,13 @@ ReactDOM.render(
   <Router>
     <Provider store={store}>
       <React.StrictMode>
+      <BrowserRouter>
+      <Auth0Provider>
+        <Auth0ProviderWithHistory>
         <App />
+        </Auth0ProviderWithHistory>
+      </Auth0Provider>
+      </BrowserRouter>
       </React.StrictMode>
     </Provider>
   </Router>,
