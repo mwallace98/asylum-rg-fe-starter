@@ -37,11 +37,9 @@ ReactDOM.render(
     <Provider store={store}>
       <React.StrictMode>
       <BrowserRouter>
-      <Auth0Provider>
         <Auth0ProviderWithHistory>
         <App />
         </Auth0ProviderWithHistory>
-      </Auth0Provider>
       </BrowserRouter>
       </React.StrictMode>
     </Provider>
