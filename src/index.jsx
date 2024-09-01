@@ -14,7 +14,8 @@ import { Profile } from './components/pages/Profile/profile';
 
 import { FooterContent, SubFooter } from './components/Layout/Footer';
 import { HeaderContent } from './components/Layout/Header';
-import { Auth0Provider } from '@auth0/auth0-react';
+import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
+import { Loading } from './components/Loading';
 
 
 // import { TablePage } from './components/pages/Table';
@@ -27,7 +28,7 @@ import reducer from './state/reducers';
 import { colors } from './styles/data_vis_colors';
 import { BrowserRouter } from 'react-router-dom/cjs/react-router-dom.min';
 import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
-import PrivateRoute from './components/PrivateRoute';
+import ProtectedRoute from './auth/protected-route';
 
 
 const { primary_accent_color } = colors;
@@ -50,6 +51,12 @@ ReactDOM.render(
 
 export function App() {
   const { Footer, Header } = Layout;
+
+  const {isLoading} = useAuth0();
+
+  if(isLoading){
+    return <Loading />;
+  }
   return (
     <Layout>
       <Header
@@ -65,9 +72,8 @@ export function App() {
       <Switch>
         <Route path="/" exact component={LandingPage} />
         <Route path="/graphs" component={GraphsContainer} />
-        <Route path='/profile' component={Profile}/>
+        <ProtectedRoute path='/profile' component={Profile}/>
         <Route component={NotFoundPage} />
-        <PrivateRoute path="/profile" component={Profile} />
       </Switch>
       <Footer
         style={{
