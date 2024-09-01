@@ -10,7 +10,7 @@ import {
 import 'antd/dist/antd.less';
 import { NotFoundPage } from './components/pages/NotFound';
 import { LandingPage } from './components/pages/Landing';
-import { Login } from './components/pages/Login/login';
+import { Profile } from './components/pages/Profile/profile';
 
 import { FooterContent, SubFooter } from './components/Layout/Footer';
 import { HeaderContent } from './components/Layout/Header';
@@ -27,6 +27,7 @@ import reducer from './state/reducers';
 import { colors } from './styles/data_vis_colors';
 import { BrowserRouter } from 'react-router-dom/cjs/react-router-dom.min';
 import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
+import PrivateRoute from './components/PrivateRoute';
 
 
 const { primary_accent_color } = colors;
@@ -64,8 +65,9 @@ export function App() {
       <Switch>
         <Route path="/" exact component={LandingPage} />
         <Route path="/graphs" component={GraphsContainer} />
-        <Route path='/login' component={Login}/>
+        <Route path='/profile' component={Profile}/>
         <Route component={NotFoundPage} />
+        <PrivateRoute path="/profile" component={Profile} />
       </Switch>
       <Footer
         style={{
