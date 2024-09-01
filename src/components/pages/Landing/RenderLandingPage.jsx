@@ -12,6 +12,7 @@ import { useHistory } from 'react-router-dom';
 import { StatSection } from './StatSection';
 import { Header } from './Header';
 import LoginButton from '../../login-button';
+import LogoutButton from '../../logout-button';
 
 
 function RenderLandingPage(props) {
@@ -30,6 +31,7 @@ function RenderLandingPage(props) {
         <div className="header-text-container">\
       
         <LoginButton />
+        <LogoutButton />
           <h1>Asylum Office Grant Rate Tracker</h1>
          
           <h3>
