@@ -13,6 +13,7 @@ import { StatSection } from './StatSection';
 import { Header } from './Header';
 import LoginButton from '../../login-button';
 import LogoutButton from '../../logout-button';
+import { useState } from 'react';
 
 
 function RenderLandingPage(props) {
@@ -22,6 +23,8 @@ function RenderLandingPage(props) {
   };
 
   const history = useHistory();
+
+  
 
  
 
